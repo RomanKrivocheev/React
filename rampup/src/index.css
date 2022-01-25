@@ -11,3 +11,16 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.strike {
+  text-decoration: line-through;
+  color:red;
+}
+
+.noStrike {
+  color:green;
+}
+
+.header {
+  color:cadetblue;
+}
