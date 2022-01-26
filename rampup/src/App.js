@@ -14,23 +14,26 @@ function App() {
   const [toDoList, setToDoList] = useState(data);
 
   const handleToggle = (id) => {
-    let mapped = toDoList.map((task) => {
+    let mapped = JSON.parse(window.localStorage.getItem("user")).map((task) => {
       return task.id === Number(id)
         ? { ...task, complete: !task.complete }
         : { ...task };
     });
     setToDoList(mapped);
     saveLocalStorage(mapped);
-    // TODO ---->
+
+    handleChange(document.getElementById("searchInput").value);
   };
 
   const handleFilter = () => {
-    let filtered = toDoList.filter((task) => {
-      return !task.complete;
-    });
+    let filtered = JSON.parse(window.localStorage.getItem("user")).filter(
+      (task) => {
+        return !task.complete;
+      }
+    );
     setToDoList(filtered);
     saveLocalStorage(filtered);
-    // TODO ---->
+    handleChange(document.getElementById("searchInput").value);
   };
 
   const addTask = (userInput) => {
@@ -48,13 +51,24 @@ function App() {
     window.localStorage.setItem("user", JSON.stringify(saveContent));
   };
   const handleChange = (e) => {
-    const result = JSON.parse(window.localStorage.getItem("user")).filter(
-      (element) => element.task.startsWith(e.currentTarget.value)
-    );
-    if (e.currentTarget.value.length == 0) {
-      setToDoList(JSON.parse(window.localStorage.getItem("user")));
+    if (typeof e === "string" || e instanceof String) {
+      const result = JSON.parse(window.localStorage.getItem("user")).filter(
+        (element) => element.task.startsWith(e)
+      );
+      if (e.length == 0) {
+        setToDoList(JSON.parse(window.localStorage.getItem("user")));
+      } else {
+        setToDoList(result);
+      }
     } else {
-      setToDoList(result);
+      const result = JSON.parse(window.localStorage.getItem("user")).filter(
+        (element) => element.task.startsWith(e.currentTarget.value)
+      );
+      if (e.currentTarget.value.length == 0) {
+        setToDoList(JSON.parse(window.localStorage.getItem("user")));
+      } else {
+        setToDoList(result);
+      }
     }
   };
 
@@ -69,6 +83,7 @@ function App() {
       <ToDoForm addTask={addTask} />
 
       <input
+        id="searchInput"
         class="form-control"
         type="text"
         onChange={handleChange}
