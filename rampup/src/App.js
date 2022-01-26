@@ -6,12 +6,9 @@ import Header from "./Header";
 import ToDoList from "./ToDoList";
 import ToDoForm from "./ToDoForm";
 
-let filtering;
-
 function App() {
   if (window.localStorage.getItem("user")) {
     data = JSON.parse(window.localStorage.getItem("user"));
-  } else {
   }
 
   const [toDoList, setToDoList] = useState(data);
@@ -23,6 +20,8 @@ function App() {
         : { ...task };
     });
     setToDoList(mapped);
+    saveLocalStorage(mapped);
+    // TODO ---->
   };
 
   const handleFilter = () => {
@@ -30,35 +29,32 @@ function App() {
       return !task.complete;
     });
     setToDoList(filtered);
+    saveLocalStorage(filtered);
+    // TODO ---->
   };
 
   const addTask = (userInput) => {
     let copy = [...toDoList];
     copy = [...copy, { id: Math.random(), task: userInput, complete: false }];
     setToDoList(copy);
+    saveLocalStorage(copy);
   };
 
   const eraseLocalStorage = () => {
     setToDoList([]);
-    window.localStorage.setItem("user", JSON.stringify([]));
+    saveLocalStorage([]);
   };
-  const saveLocalStorage = () => {
-    window.localStorage.setItem("user", JSON.stringify(toDoList));
+  const saveLocalStorage = (saveContent) => {
+    window.localStorage.setItem("user", JSON.stringify(saveContent));
   };
   const handleChange = (e) => {
-    const result = toDoList.filter(
-      (element) => element.task == e.currentTarget.value
+    const result = JSON.parse(window.localStorage.getItem("user")).filter(
+      (element) => element.task.startsWith(e.currentTarget.value)
     );
-
-    if (result.length > 0) {
-      window.localStorage.setItem("user", JSON.stringify(toDoList));
-      setToDoList(result);
-      filtering = true;
+    if (e.currentTarget.value.length == 0) {
+      setToDoList(JSON.parse(window.localStorage.getItem("user")));
     } else {
-      if (filtering) {
-        setToDoList(JSON.parse(window.localStorage.getItem("user")));
-        filtering = false;
-      }
+      setToDoList(result);
     }
   };
 
@@ -81,9 +77,6 @@ function App() {
 
       <button class="btn btn-danger" onClick={eraseLocalStorage}>
         Erase local info and start over
-      </button>
-      <button class="btn btn-success" onClick={saveLocalStorage}>
-        Save info on local storage
       </button>
     </div>
   );
