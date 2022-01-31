@@ -15,13 +15,13 @@ const ToDoForm = ({ addTask }) => {
   return (
     <form onSubmit={handleSubmit}>
       <input
-        class="form-control"
+        className="form-control"
         value={userInput}
         type="text"
         onChange={handleChange}
         placeholder="Enter a task to add..."
       />
-      <button style={{ margin: "10px" }} class="btn btn-primary">Submit</button>
+      <button style={{ margin: "10px" }} className="btn btn-primary">Submit</button>
     </form>
   );
 };

@@ -6,14 +6,14 @@ const ToDoList = ({ toDoList, handleToggle, handleFilter }) => {
     <div>
       {toDoList.map((todo) => {
         return (
-          <ToDo
+          <ToDo key={Math.random()}
             todo={todo}
             handleToggle={handleToggle}
             handleFilter={handleFilter}
           />
         );
       })}
-      <button class="btn btn-secondary" style={{ margin: "20px" }} onClick={handleFilter}>
+      <button className="btn btn-secondary" style={{ margin: "20px" }} onClick={handleFilter}>
         Clear Completed
       </button>
     </div>
